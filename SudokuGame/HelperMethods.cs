@@ -45,5 +45,31 @@ namespace SudokuGame
 
             return requestedCol;
         }
+
+        public static List<int> GetRowNumbers<T>(this T[,] input, int row) where T : IComparable
+        {
+            List<int> rowNums = new List<int>();
+            var rowArray = input.GetRow(row);
+
+            for (int i = 0; i < rowArray.Length; i++)
+            {
+                rowNums.Add(Convert.ToInt32(rowArray[i]));
+            }
+
+            return rowNums;
+        }
+
+        public static List<int> GetColNumbers<T>(this T[,] input, int col) where T : IComparable
+        {
+            List<int> colNums = new List<int>();
+            var colArray = input.GetCol(col);
+
+            for (int i = 0; i < colArray.Length; i++)
+            {
+                colNums.Add(Convert.ToInt32(colArray[i]));
+            }
+
+            return colNums;
+        }
     }
 }

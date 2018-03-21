@@ -60,8 +60,6 @@ namespace SudokuGame
             clicked.Text = numbers.SelectedItem.ToString();
             if (!board.CheckSpot(clicked.Row, clicked.Column))
                 clicked.BackColor = Color.Red;
-            //if (clicked.BackColor == Color.Red && !board.CheckSpot(clicked.Row, clicked.Column))
-            //    clicked.BackColor = Color.LightGray;
         }
 
         #endregion

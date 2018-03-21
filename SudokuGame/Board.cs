@@ -185,7 +185,26 @@ namespace SudokuGame
 
         public bool CheckSpot(int row, int col)
         {
-            return CheckRow(row) && CheckColumn(col);
+            List<int> rowNums = HelperMethods.GetRowNumbers(gameBoard, row);
+            List<int> colNums = HelperMethods.GetColNumbers(gameBoard, col);
+
+            var rowArray = gameBoard.GetRow(row);
+            var colArray = gameBoard.GetCol(col);
+
+            for (int i = 0; i < rowArray.Length; i++)
+            {
+                if (rowNums.Contains(rowArray[i]))
+                    return false;
+                rowNums.Add(rowArray[i]);
+            }
+
+            for (int i = 0; i < colArray.Length; i++)
+            {
+                if (colNums.Contains(colArray[i]))
+                    return false;
+                colNums.Add(colArray[i]);
+            }
+            return true;
         }
 
         #endregion
