@@ -1,0 +1,3 @@
+C:\Users\Gutman\Desktop\SudokuGame\SudokuGame\bin\Debug\SudokuGame.exe.config
+C:\Users\Gutman\Desktop\SudokuGame\SudokuGame\obj\Debug\SudokuGame.exe
+C:\Users\Gutman\Desktop\SudokuGame\SudokuGame\obj\Debug\SudokuGame.pdb
