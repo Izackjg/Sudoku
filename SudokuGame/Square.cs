@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System.Drawing;
 
 namespace SudokuGame
 {
@@ -8,28 +9,24 @@ namespace SudokuGame
         private int row;
         private int col;
 
-        public Square(int size, int row, int col) : base()
+        public int SquareSize { get { return Settings.Size; } }
+        public int Row { get { return row; } set { row = value; } }
+        public int Column { get { return col; } set { col = value; } }
+
+        public Square(int size, int row, int col)
         {
             this.size = size;
             this.row = row;
             this.col = col;
 
-            Height = size;
-            Width = size;
+            Size = new Size(size, size);
         }
 
-        public Square() : base()
+        public Square()
         {
-            this.size = 0;
-            this.row = 0;
-            this.col = 0;
+            size = 0;
+            row = 0;
+            col = 0;
         }
-
-        public void SetRow(int row) { this.row = row; }
-        public void SetCol(int col) { this.col = col; }
-
-        public int GetSize() { return size; }
-        public int GetRow() { return row; }
-        public int GetCol() { return col; }
     }
 }

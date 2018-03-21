@@ -183,6 +183,11 @@ namespace SudokuGame
             return true;
         }
 
+        public bool CheckSpot(int row, int col)
+        {
+            return CheckRow(row) && CheckColumn(col);
+        }
+
         #endregion
 
         #region Private Methods

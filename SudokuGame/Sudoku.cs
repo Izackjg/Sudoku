@@ -9,6 +9,11 @@ namespace SudokuGame
     {
         #region Fields
 
+        private GameForm form;
+        private PictureBox canvas;
+        private ComboBox numbers;
+        private Square clicked;
+
         private static Random random = new Random();
 
         private bool displayed;
@@ -27,9 +32,11 @@ namespace SudokuGame
 
         #region Constructors
 
-        public Sudoku(GameForm form, PictureBox board, Difficulty diff)
+        public Sudoku(GameForm form, PictureBox canvas, Difficulty diff)
         {
+            this.form = form;
             this.diff = diff;
+            this.canvas = canvas;
 
             displayed = false;
 
@@ -38,7 +45,23 @@ namespace SudokuGame
 
             squares = new Square[Settings.Rows, Settings.Cols];
 
-            CreateButtonsAndDisplayBoard(form, board);
+            CreateButtonsAndDisplayBoard(form, canvas);
+            numbers = new ComboBox();
+            numbers.DropDownStyle = ComboBoxStyle.DropDownList;
+            numbers.Items.AddRange(new object[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+            numbers.Font = new Font("Arial", Settings.FontSize);
+            numbers.Visible = true;
+            numbers.Enabled = true;
+            numbers.SelectedValueChanged += Numbers_SelectedValueChanged;
+        }
+
+        private void Numbers_SelectedValueChanged(object sender, EventArgs e)
+        {
+            clicked.Text = numbers.SelectedItem.ToString();
+            if (!board.CheckSpot(clicked.Row, clicked.Column))
+                clicked.BackColor = Color.Red;
+            //if (clicked.BackColor == Color.Red && !board.CheckSpot(clicked.Row, clicked.Column))
+            //    clicked.BackColor = Color.LightGray;
         }
 
         #endregion
@@ -160,10 +183,14 @@ namespace SudokuGame
 
         private void OnClick(object sender, MouseEventArgs e)
         {
-            Square clickedSq = sender as Square;
-            int row = clickedSq.GetRow();
-            int col = clickedSq.GetCol();
-            MessageBox.Show("Row: " + row + ", Col: " + col);
+            clicked = (Square)sender;
+
+            if (clicked.Text == "")
+            {
+                canvas.Controls.Add(numbers);
+                numbers.Location = clicked.Location;
+                numbers.BringToFront();
+            }
         }
 
         #endregion
