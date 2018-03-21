@@ -15,9 +15,9 @@ namespace SudokuGame
         private Sudoku game;
 
         public GameForm()
-        {            
+        {
             InitializeComponent();
-            
+
             game = new Sudoku(this, board, Difficulty.Easy);
             game.Hide();
 
@@ -45,7 +45,7 @@ namespace SudokuGame
                 game.SetDisplayed(true);
                 isBoardDisplayed = game.IsDisplayed();
 
-                btnDisplayAnswers.Text = "Display";
+                btnDisplayAnswers.Text = "Hide";
             }
             else if (isBoardDisplayed)
             {
@@ -53,7 +53,7 @@ namespace SudokuGame
                 game.SetDisplayed(false);
                 isBoardDisplayed = game.IsDisplayed();
 
-                btnDisplayAnswers.Text = "Hide";
+                btnDisplayAnswers.Text = "Display";
             }
         }
 
@@ -63,7 +63,7 @@ namespace SudokuGame
             game.RefreshBoardAndClearHidden();
             game.DiluteBoard(Settings.Rows, Settings.Cols);
             game.Hide();
-            
+
             int hiddenCount = game.GetBoard().CountHidden();
             lblHiddenCount.Text = "Hidden: " + hiddenCount.ToString();
         }

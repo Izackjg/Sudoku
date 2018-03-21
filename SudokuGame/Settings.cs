@@ -8,15 +8,6 @@ namespace SudokuGame
 {
     static class Settings
     {
-        #region Public Methods
-
-        public static int CalculateTimes(double level)
-        {
-            return (Rows * Cols) - (int)(level * 10 + 5);
-        }
-
-        #endregion
-
         #region Thresholds
 
         public const int SetThreshold = -1;

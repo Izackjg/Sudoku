@@ -172,7 +172,7 @@ namespace SudokuGame
             {
                 for (int j = 0; j < Settings.Cols; j++)
                 {
-                    valid = CheckRow(i) && CheckColumn(j);
+                    valid = CheckRow(i) && CheckColumn(j) && CheckBlock();
 
                     if (!valid)
                         return false;
@@ -231,30 +231,64 @@ namespace SudokuGame
 
         private bool CheckRow(int row)
         {
-            List<int> rowNums = new List<int>();
+            bool[] rowNums = new bool[9];
+            //List<int> rowNums = new List<int>();
 
             for (int i = 0; i < Settings.Cols; i++)
             {
-                if (rowNums.Contains(gameBoard[row, i]))
+                if (rowNums[gameBoard[row, i] - 1])
                     return false;
-                rowNums.Add(gameBoard[row, i]);
+                rowNums[gameBoard[row, i] - 1] = true;
+                //if (rowNums.Contains(gameBoard[row, i]))
+                //    return false;
+                //rowNums.Add(gameBoard[row, i]);
             }
 
-            return ContainsAllNums(rowNums) && true;
+            return true;
         }
 
         private bool CheckColumn(int col)
         {
-            List<int> colNums = new List<int>();
+            bool[] colNums = new bool[9];
+            //List<int> colNums = new List<int>();
 
             for (int i = 0; i < Settings.Rows; i++)
             {
-                if (colNums.Contains(gameBoard[i, col]))
+                if (colNums[gameBoard[i, col] - 1])
                     return false;
-                colNums.Add(gameBoard[i, col]);
+                colNums[gameBoard[i, col] - 1] = true;
+                //if (colNums.Contains(gameBoard[i, col]))
+                //    return false;
+                //colNums.Add(gameBoard[i, col]);
             }
 
-            return ContainsAllNums(colNums) && true;
+            return true;
+        }
+
+        private bool CheckBlock()
+        {
+            bool[] blockNums = new bool[9]; // 0 -> 9 (value has to be value - 1).
+            for (int i = 0; i < Settings.Rows; i++)
+            {
+                for (int j = 0; j < Settings.Cols; j++)
+                {
+                    for (int k = i; k < 3 + i; k++)
+                    {
+                        for (int l = j; l < 3 + j; l++)
+                        {
+                            int current = gameBoard[i, j];
+                            blockNums[current - 1] = true;
+                        }
+                    }
+                }
+            }
+
+            foreach (var boolVal in blockNums)
+            {
+                if (!boolVal)
+                    return false;
+            }
+            return true;
         }
 
         private bool ContainsAllNums(List<int> numbers)
