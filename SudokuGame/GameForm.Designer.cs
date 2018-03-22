@@ -56,7 +56,6 @@
             this.btnReshuffle.TabIndex = 1;
             this.btnReshuffle.Text = "New Game";
             this.btnReshuffle.UseVisualStyleBackColor = true;
-            this.btnReshuffle.Click += new System.EventHandler(this.btnReshuffle_Click);
             // 
             // lblHiddenCount
             // 

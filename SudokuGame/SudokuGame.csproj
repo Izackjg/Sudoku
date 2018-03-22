@@ -63,7 +63,6 @@
     <Compile Include="Square.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Sudoku.cs" />
     <Compile Include="Visibility.cs" />
     <EmbeddedResource Include="GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>

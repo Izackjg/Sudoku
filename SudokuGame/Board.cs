@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SudokuGame
 {
@@ -10,7 +7,11 @@ namespace SudokuGame
     {
         #region Fields
 
-        public static Random random = new Random();
+        private Form parent;
+        private PictureBox canvas;
+
+        private static Random random = new Random();
+        private const int Times = 10000;
 
         private Cell[,] cells;
         private Difficulty boardDifficulty;
@@ -48,8 +49,10 @@ namespace SudokuGame
 
         #region Constructors
 
-        public Board(Difficulty boardDifficulty)
+        public Board(Form parent, PictureBox canvas, Difficulty boardDifficulty)
         {
+            this.parent = parent;
+            this.canvas = canvas;
             this.boardDifficulty = boardDifficulty;
             lower = CalculateLower(boardDifficulty);
 
@@ -58,6 +61,42 @@ namespace SudokuGame
             cells = new Cell[rows, cols];
 
             CreateSolved();
+        }
+        
+        #endregion
+
+        #region Public Methods
+
+        public void Shuffle()
+        {
+            int s;
+            int shuffleOne;
+            int shuffleTwo;
+
+            for (int i = 0; i < Times; i++)
+            {
+                s = random.Next(3);
+                shuffleOne = s * 3 + random.Next(3);
+                shuffleTwo = s * 3 + random.Next(3);
+                SwitchRows(shuffleOne, shuffleTwo);
+            }
+
+            for (int i = 0; i < Times; i++)
+            {
+                s = random.Next(3);
+                shuffleOne = s * 3 + random.Next(3);
+                shuffleTwo = s * 3 + random.Next(3);
+                SwitchCols(shuffleOne, shuffleTwo);
+            }
+
+            for (int i = 0; i < Times; i++)
+            {
+                s = random.Next(3);
+                shuffleOne = s * 3 + random.Next(3);
+                shuffleTwo = s * 3 + random.Next(3);
+                SwitchRows(shuffleOne, shuffleTwo);
+                SwitchCols(shuffleOne, shuffleTwo);
+            }
         }
 
         #endregion
@@ -90,8 +129,27 @@ namespace SudokuGame
                     return -1;
             }
         }
+        
+        private void SwitchRows(int row1, int row2)
+        {
+            for (int i = 0; i < Settings.Cols; i++)
+            {
+                int temp = cells[row1, i].CellValue;
+                cells[row1, i].CellValue = cells[row2, i].CellValue;
+                cells[row2, i].CellValue = temp;
+            }
+        }
+
+        private void SwitchCols(int col1, int col2)
+        {
+            for (int i = 0; i < Settings.Rows; i++)
+            {
+                int temp = cells[i, col1].CellValue;
+                cells[i, col1].CellValue = cells[i, col2].CellValue;
+                cells[i, col2].CellValue = temp;
+            }
+        }
 
         #endregion
-
     }
 }
