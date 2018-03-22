@@ -10,294 +10,88 @@ namespace SudokuGame
     {
         #region Fields
 
-        private Random random = new Random();
+        public static Random random = new Random();
 
-        private const int TIMES = 10000;
-
-        private Difficulty diff;
+        private Cell[,] cells;
+        private Difficulty boardDifficulty;
 
         private int lower;
-        private int[,] gameBoard;
-        private int[,] hiddenGameBoard;
+        private int rows;
+        private int cols;
 
         #endregion
 
-        #region Constructor
+        #region Properties
 
-        public Board()
+        public Cell this[int row, int col]
         {
-            gameBoard = new int[Settings.Rows, Settings.Cols];
-            hiddenGameBoard = new int[Settings.Rows, Settings.Cols];
-            CreateSolvedBoard();
-            CopyOriginalToHidden();
-        }
-
-        public Board(Difficulty diff)
-        {
-            this.diff = diff;
-            if (diff == Difficulty.Easy)
-                lower = Settings.EasyLower;
-            else if (diff == Difficulty.Medium)
-                lower = Settings.MediumLower;
-            else
-                lower = Settings.HardLower;
-
-            gameBoard = new int[Settings.Rows, Settings.Cols];
-            hiddenGameBoard = new int[Settings.Rows, Settings.Cols];
-            CreateSolvedBoard();
-            CopyOriginalToHidden();
-        }
-        #endregion
-
-        #region Shuffle Methods
-
-        public void WrongShuffle()
-        {
-            WrongShuffle(TIMES, TIMES, TIMES);
-        }
-
-        private void WrongShuffle(int timesRows, int timesCols, int timesBoth)
-        {
-            for (int i = 0; i < timesRows; i++)
+            get
             {
-                SwitchRows(random.Next(0, 9), random.Next(0, 9));
+                if (row >= rows || col >= cols)
+                    throw new IndexOutOfRangeException();
+                return cells[row, col];
             }
-
-            for (int i = 0; i < timesCols; i++)
+            set
             {
-                SwitchCols(random.Next(0, 9), random.Next(0, 9));
-            }
-
-            for (int i = 0; i < timesBoth; i++)
-            {
-                SwitchRows(random.Next(0, 9), random.Next(0, 9));
-                SwitchCols(random.Next(0, 9), random.Next(0, 9));
+                if (row >= rows || col >= cols)
+                    throw new IndexOutOfRangeException();
+                cells[row, col] = value;
             }
         }
 
-        public void Shuffle()
-        {
-            Shuffle(TIMES, TIMES, TIMES);
-        }
-
-        private void Shuffle(int timesRows, int timesCols, int timesBoth)
-        {
-            int s;
-            int shuffleOne;
-            int shuffleTwo;
-
-            for (int i = 0; i < timesRows; i++)
-            {
-                s = random.Next(3);
-                shuffleOne = s * 3 + random.Next(3);
-                shuffleTwo = s * 3 + random.Next(3);
-                SwitchRows(shuffleOne, shuffleTwo);
-            }
-
-            for (int i = 0; i < timesCols; i++)
-            {
-                s = random.Next(3);
-                shuffleOne = s * 3 + random.Next(3);
-                shuffleTwo = s * 3 + random.Next(3);
-                SwitchCols(shuffleOne, shuffleTwo);
-            }
-
-            for (int i = 0; i < timesBoth; i++)
-            {
-                s = random.Next(3);
-                shuffleOne = s * 3 + random.Next(3);
-                shuffleTwo = s * 3 + random.Next(3);
-                SwitchRows(shuffleOne, shuffleTwo);
-                SwitchCols(shuffleOne, shuffleTwo);
-            }
-        }
+        public Difficulty Difficulty { get { return boardDifficulty; } }
+        public int Lower { get { return lower; } }
+        public int Rows { get { return rows; } }
+        public int Columns { get { return cols; } }
 
         #endregion
 
-        #region Public Methods
+        #region Constructors
 
-        public void SetEmpty(int row, int col)
+        public Board(Difficulty boardDifficulty)
         {
-            SetRowEmpty(row);
-            SetColEmpty(col);
-        }
+            this.boardDifficulty = boardDifficulty;
+            lower = CalculateLower(boardDifficulty);
 
-        private void SetRowEmpty(int row)
-        {
-            for (int i = 0; i < Settings.Cols; i++)
-            {
-                int times = random.Next(1, lower + 1);
-                for (int j = 0; j < times; j++)
-                {
-                    hiddenGameBoard[i, row] = Settings.SetThreshold;
-                    row = random.Next(Settings.Rows);
-                }
-            }
-        }
+            rows = Settings.Rows;
+            cols = Settings.Cols;
+            cells = new Cell[rows, cols];
 
-        private void SetColEmpty(int col)
-        {
-            for (int i = 0; i < Settings.Rows; i++)
-            {
-                int times = random.Next(1, lower + 1);
-                for (int j = 0; j < times; j++)
-                {
-                    hiddenGameBoard[col, i] = Settings.SetThreshold;
-                    col = random.Next(Settings.Cols);
-                }
-            }
-        }
-
-        public int CountHidden()
-        {
-            int count = 0;
-
-            for (int i = 0; i < Settings.Rows; i++)
-            {
-                for (int j = 0; j < Settings.Cols; j++)
-                {
-                    if (hiddenGameBoard[i, j] < Settings.HiddenThreshold)
-                        count++;
-                }
-            }
-
-            return count;
-        }
-
-        public bool IsValid()
-        {
-            bool valid = false;
-
-            for (int i = 0; i < Settings.Rows; i++)
-            {
-                for (int j = 0; j < Settings.Cols; j++)
-                {
-                    valid = CheckRow(i) && CheckColumn(j) && CheckBlock();
-
-                    if (!valid)
-                        return false;
-
-                }
-            }
-
-            return true;
-        }
-
-        public bool CheckSpot(int row, int col)
-        {
-            return CheckRow(row) && CheckColumn(col);
+            CreateSolved();
         }
 
         #endregion
 
         #region Private Methods
 
-        private void CreateSolvedBoard()
+        private void CreateSolved()
         {
-            for (int i = 0; i < Settings.Rows; i++)
+            for (int i = 0; i < rows; i++)
             {
-                for (int j = 0; j < Settings.Cols; j++)
+                for (int j = 0; j < cols; j++)
                 {
-                    gameBoard[i, j] = (i * 3 + i / 3 + j) % 9 + 1;
+                    int value = (i * 3 + 9 / 3 + j) % 9 + 1;
+                    cells[i, j] = new Cell(value, i, j);
                 }
             }
         }
 
-        private void CopyOriginalToHidden()
+        private int CalculateLower(Difficulty diff)
         {
-            for (int i = 0; i < Settings.Rows; i++)
+            switch (diff)
             {
-                for (int j = 0; j < Settings.Cols; j++)
-                {
-                    hiddenGameBoard[i, j] = gameBoard[i, j];
-                }
+                case Difficulty.Easy:
+                    return Settings.EasyLower;
+                case Difficulty.Medium:
+                    return Settings.MediumLower;
+                case Difficulty.Hard:
+                    return Settings.HardLower;
+                default:
+                    return -1;
             }
-        }
-
-        private void SwitchRows(int row1, int row2)
-        {
-            for (int i = 0; i < Settings.Cols; i++)
-            {
-                int temp = gameBoard[row1, i];
-                gameBoard[row1, i] = gameBoard[row2, i];
-                gameBoard[row2, i] = temp;
-            }
-        }
-
-        private void SwitchCols(int col1, int col2)
-        {
-            for (int i = 0; i < Settings.Rows; i++)
-            {
-                int temp = gameBoard[i, col1];
-                gameBoard[i, col1] = gameBoard[i, col2];
-                gameBoard[i, col2] = temp;
-            }
-        }
-
-        private bool CheckRow(int row)
-        {
-            bool[] rowNums = new bool[9];
-
-            for (int i = 0; i < Settings.Cols; i++)
-            {
-                if (rowNums[gameBoard[row, i] - 1])
-                    return false;
-                rowNums[gameBoard[row, i] - 1] = true;
-            }
-
-            return true;
-        }
-
-        private bool CheckColumn(int col)
-        {
-            bool[] colNums = new bool[9];
-
-            for (int i = 0; i < Settings.Rows; i++)
-            {
-                if (colNums[gameBoard[i, col] - 1])
-                    return false;
-                colNums[gameBoard[i, col] - 1] = true;
-            }
-
-            return true;
-        }
-
-        private bool CheckBlock()
-        {
-            bool[] blockNums = new bool[9]; // 0 -> 9 (value has to be value - 1).
-            for (int i = 0; i < Settings.Rows; i++)
-            {
-                for (int j = 0; j < Settings.Cols; j++)
-                {
-                    for (int k = i; k < 3 + i; k++)
-                    {
-                        for (int l = j; l < 3 + j; l++)
-                        {
-                            int current = gameBoard[i, j];
-                            blockNums[current - 1] = true;
-                        }
-                    }
-                }
-            }
-
-            foreach (var boolVal in blockNums)
-            {
-                if (!boolVal)
-                    return false;
-            }
-            return true;
         }
 
         #endregion
 
-        #region Get/Set
-
-        public void SetGameBoard(int[,] gameBoard) { this.gameBoard = gameBoard; }
-        public void SetHiddenGameBoard(int[,] hiddenGameBoard) { this.hiddenGameBoard = hiddenGameBoard; }
-
-        public int[,] GetGameBoard() { return gameBoard; }
-        public int[,] GetHiddenGameBoard() { return hiddenGameBoard; }
-
-        #endregion
     }
 }

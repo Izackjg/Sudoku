@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Board.cs" />
+    <Compile Include="Cell.cs" />
     <Compile Include="Difficulty.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
@@ -63,6 +64,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Sudoku.cs" />
+    <Compile Include="Visibility.cs" />
     <EmbeddedResource Include="GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>
