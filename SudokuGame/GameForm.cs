@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SudokuGame
@@ -66,6 +60,12 @@ namespace SudokuGame
 
             int hiddenCount = game.GetBoard().CountHidden();
             lblHiddenCount.Text = "Hidden: " + hiddenCount.ToString();
+
+            foreach (Control c in board.Controls)
+            {
+                if (c.BackColor == Color.Red)
+                    c.BackColor = Color.LightGray;
+            }
         }
 
         private void AddComboBoxItems()

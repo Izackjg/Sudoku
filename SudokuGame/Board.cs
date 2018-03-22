@@ -185,26 +185,7 @@ namespace SudokuGame
 
         public bool CheckSpot(int row, int col)
         {
-            List<int> rowNums = HelperMethods.GetRowNumbers(gameBoard, row);
-            List<int> colNums = HelperMethods.GetColNumbers(gameBoard, col);
-
-            var rowArray = gameBoard.GetRow(row);
-            var colArray = gameBoard.GetCol(col);
-
-            for (int i = 0; i < rowArray.Length; i++)
-            {
-                if (rowNums.Contains(rowArray[i]))
-                    return false;
-                rowNums.Add(rowArray[i]);
-            }
-
-            for (int i = 0; i < colArray.Length; i++)
-            {
-                if (colNums.Contains(colArray[i]))
-                    return false;
-                colNums.Add(colArray[i]);
-            }
-            return true;
+            return CheckRow(row) && CheckColumn(col);
         }
 
         #endregion
@@ -256,16 +237,12 @@ namespace SudokuGame
         private bool CheckRow(int row)
         {
             bool[] rowNums = new bool[9];
-            //List<int> rowNums = new List<int>();
 
             for (int i = 0; i < Settings.Cols; i++)
             {
                 if (rowNums[gameBoard[row, i] - 1])
                     return false;
                 rowNums[gameBoard[row, i] - 1] = true;
-                //if (rowNums.Contains(gameBoard[row, i]))
-                //    return false;
-                //rowNums.Add(gameBoard[row, i]);
             }
 
             return true;
@@ -274,16 +251,12 @@ namespace SudokuGame
         private bool CheckColumn(int col)
         {
             bool[] colNums = new bool[9];
-            //List<int> colNums = new List<int>();
 
             for (int i = 0; i < Settings.Rows; i++)
             {
                 if (colNums[gameBoard[i, col] - 1])
                     return false;
                 colNums[gameBoard[i, col] - 1] = true;
-                //if (colNums.Contains(gameBoard[i, col]))
-                //    return false;
-                //colNums.Add(gameBoard[i, col]);
             }
 
             return true;
@@ -312,17 +285,6 @@ namespace SudokuGame
                 if (!boolVal)
                     return false;
             }
-            return true;
-        }
-
-        private bool ContainsAllNums(List<int> numbers)
-        {
-            for (int i = 1; i < 10; i++)
-            {
-                if (!numbers.Contains(i))
-                    return false;
-            }
-
             return true;
         }
 
