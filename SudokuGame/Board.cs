@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace SudokuGame
@@ -14,6 +16,7 @@ namespace SudokuGame
         private const int Times = 10000;
 
         private Cell[,] cells;
+        private Square[,] squares;
         private Difficulty boardDifficulty;
 
         private int lower;
@@ -59,10 +62,13 @@ namespace SudokuGame
             rows = Settings.Rows;
             cols = Settings.Cols;
             cells = new Cell[rows, cols];
+            squares = new Square[rows, cols];
 
-            CreateSolved();
+            Initiate();
+
+            AddSquares();
         }
-        
+
         #endregion
 
         #region Public Methods
@@ -101,7 +107,92 @@ namespace SudokuGame
 
         #endregion
 
+        #region Dilution and Hiding
+
+        public void Dilute()
+        {
+            Dilute(random.Next(rows), random.Next(cols));
+        }
+
+        private void Dilute(int row, int col)
+        {
+            SetRowEmpty(row);
+            SetColEmpty(col);
+        }
+
+        public void Hide()
+        {
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    if (!cells[i, j].IsVisible)
+                        squares[i, j].Text = "";
+                }
+            }
+        }
+
+        private void SetRowEmpty(int row)
+        {
+            for (int i = 0; i < cols; i++)
+            {
+                int times = random.Next(1, lower + 1);
+
+                for (int j = 0; j < times; j++)
+                {
+                    cells[row, i].CellVisibility = Visibility.Hidden;
+                    row = random.Next(Settings.Rows);
+                }
+            }
+        }
+
+        private void SetColEmpty(int col)
+        {
+            for (int i = 0; i < Settings.Rows; i++)
+            {
+                int times = random.Next(1, lower + 1);
+
+                for (int j = 0; j < times; j++)
+                {
+                    cells[i, col].CellVisibility = Visibility.Hidden;
+                    col = random.Next(Settings.Cols);
+                }
+            }
+        }
+
+        #endregion
+
         #region Private Methods
+
+        private void AddSquares()
+        {
+            foreach (Square sq in squares)
+            {
+                canvas.Controls.Add(sq);
+            }
+        }
+
+        private void Initiate()
+        {
+            CreateSolved();
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    squares[i, j] = new Square(Settings.Size, i, j);
+                    int x = 5 + (Settings.Size + 1) * j + (j / 3) * 4;
+                    int y = 5 + (Settings.Size + 1) * i + (i / 3) * 4;
+                    Point p = new Point(x, y);
+                    squares[i, j].Font = new Font("Arial", Settings.FontSize);
+                    squares[i, j].Location = p;
+                    squares[i, j].Visible = true;
+                    squares[i, j].Name = String.Format("{0},{1}", i, j);
+                    canvas.Controls.Add(squares[i, j]);
+                    squares[i, j].Text = cells[i, j].CellValue.ToString();
+                    squares[i, j].BackColor = Color.LightGray;
+                }
+            }
+        }
 
         private void CreateSolved()
         {
@@ -129,7 +220,7 @@ namespace SudokuGame
                     return -1;
             }
         }
-        
+
         private void SwitchRows(int row1, int row2)
         {
             for (int i = 0; i < Settings.Cols; i++)

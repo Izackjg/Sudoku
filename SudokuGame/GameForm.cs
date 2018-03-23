@@ -12,8 +12,9 @@ namespace SudokuGame
         {
             InitializeComponent();
 
-            game = new Board(this, board, Difficulty.Easy);
-            game.Hide();
+            game = new Board(this, canvas, Difficulty.Easy);
+            game.Shuffle();
+            
 
             StartPosition = FormStartPosition.CenterScreen;
 
@@ -24,6 +25,21 @@ namespace SudokuGame
 
             MaximizeBox = false;
             FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            AdjustSize();
+        }
+
+        private void AdjustSize()
+        {
+            int width = Settings.Rows * (Settings.Size + 1) + 15;
+            int wDelta = width - canvas.Width;
+            canvas.Width = width;
+            Width += wDelta;
+
+            int height = Settings.Cols * (Settings.Size + 1) + 15;
+            int hDelta = height - canvas.Height;
+            canvas.Height = height;
+            Height += hDelta;
         }
 
         private void btnDisplayAnswers_Click(object sender, EventArgs e)
@@ -55,9 +71,8 @@ namespace SudokuGame
             //game.GetBoard().Shuffle();
             //game.RefreshBoardAndClearHidden();
             //game.DiluteBoard(Settings.Rows, Settings.Cols);
-            game.Hide();
 
-            foreach (Control c in board.Controls)
+            foreach (Control c in canvas.Controls)
             {
                 if (c.BackColor == Color.Red)
                     c.BackColor = Color.LightGray;

@@ -30,10 +30,9 @@
         {
             this.btnDisplayAnswers = new System.Windows.Forms.Button();
             this.btnReshuffle = new System.Windows.Forms.Button();
-            this.lblHiddenCount = new System.Windows.Forms.Label();
-            this.board = new System.Windows.Forms.PictureBox();
+            this.canvas = new System.Windows.Forms.PictureBox();
             this.cmbDifficulties = new System.Windows.Forms.ComboBox();
-            ((System.ComponentModel.ISupportInitialize)(this.board)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             this.SuspendLayout();
             // 
             // btnDisplayAnswers
@@ -57,24 +56,14 @@
             this.btnReshuffle.Text = "New Game";
             this.btnReshuffle.UseVisualStyleBackColor = true;
             // 
-            // lblHiddenCount
+            // canvas
             // 
-            this.lblHiddenCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.lblHiddenCount.Location = new System.Drawing.Point(8, 403);
-            this.lblHiddenCount.Name = "lblHiddenCount";
-            this.lblHiddenCount.Size = new System.Drawing.Size(155, 30);
-            this.lblHiddenCount.TabIndex = 2;
-            this.lblHiddenCount.Text = "Hidden: ";
-            this.lblHiddenCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // board
-            // 
-            this.board.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            this.board.Location = new System.Drawing.Point(171, 12);
-            this.board.Name = "board";
-            this.board.Size = new System.Drawing.Size(444, 421);
-            this.board.TabIndex = 3;
-            this.board.TabStop = false;
+            this.canvas.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.canvas.Location = new System.Drawing.Point(171, 12);
+            this.canvas.Name = "canvas";
+            this.canvas.Size = new System.Drawing.Size(444, 421);
+            this.canvas.TabIndex = 3;
+            this.canvas.TabStop = false;
             // 
             // cmbDifficulties
             // 
@@ -92,13 +81,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(627, 446);
             this.Controls.Add(this.cmbDifficulties);
-            this.Controls.Add(this.board);
-            this.Controls.Add(this.lblHiddenCount);
+            this.Controls.Add(this.canvas);
             this.Controls.Add(this.btnReshuffle);
             this.Controls.Add(this.btnDisplayAnswers);
             this.Name = "GameForm";
             this.Text = "Game Form";
-            ((System.ComponentModel.ISupportInitialize)(this.board)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.canvas)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -107,8 +95,7 @@
 
         private System.Windows.Forms.Button btnDisplayAnswers;
         private System.Windows.Forms.Button btnReshuffle;
-        private System.Windows.Forms.Label lblHiddenCount;
-        private System.Windows.Forms.PictureBox board;
+        private System.Windows.Forms.PictureBox canvas;
         private System.Windows.Forms.ComboBox cmbDifficulties;
     }
 }

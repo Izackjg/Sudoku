@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using System.Drawing;
+using System;
 
 namespace SudokuGame
 {
@@ -20,13 +21,13 @@ namespace SudokuGame
             this.col = col;
 
             Size = new Size(size, size);
+
+            this.MouseClick += Square_MouseClick;
         }
 
-        public Square()
+        private void Square_MouseClick(object sender, MouseEventArgs e)
         {
-            size = 0;
-            row = 0;
-            col = 0;
-        }
+
+        }       
     }
 }
